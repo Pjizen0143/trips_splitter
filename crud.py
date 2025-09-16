@@ -21,3 +21,20 @@ def create_trip(trip: CreateTrip):
         "members": trip_with_key.members,
         "last_updated": now,
     }
+
+
+def get_trip(trip_key: str):
+    trip = collection.find_one({"trip_key": trip_key})
+    if trip:
+        trip["_id"] = str(trip["_id"])
+        # find return Doc ที่มี _id เป็น ObjectId ทำให้แปลงเป็น Json ไม่ได้
+        # เลยต้องเปลี่ยน _id เป็น str ก่อน
+        return trip
+    return None
+
+
+def delete_trip(trip_key: str):
+    result = collection.delete_one({"trip_key": trip_key})
+    if result.deleted_count == 1:
+        return result
+    return None
