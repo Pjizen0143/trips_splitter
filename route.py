@@ -1,4 +1,5 @@
 from models import CreateTrip
+from utils import calculate
 import crud
 
 from fastapi import APIRouter, HTTPException
@@ -28,3 +29,12 @@ async def delete_trip(trip_code: str):
     if not trip:
         return {"error": "Trip not found"}
     return {"message": "Trip deleted"}
+
+
+@router.get("/trips/cal/{trip_code}")
+def calculate_trip(trip_code: str):
+    split = calculate(trip_code)
+    if not split:
+        return {"error": "Trip not found"}
+    return split
+
