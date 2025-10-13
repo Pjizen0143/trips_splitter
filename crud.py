@@ -1,5 +1,5 @@
 from utils import random_key
-from models import CreateTrip, Trip
+from models import CreateTrip, Trip, UpdateTrip, Response
 from db import collection
 
 from datetime import datetime, timezone
@@ -38,3 +38,36 @@ def delete_trip(trip_code: str):
     if result.deleted_count == 1:
         return result
     return None
+
+
+def update_trip(trip_code: str, trip: UpdateTrip):
+    update_data = trip.model_dump()
+
+    for i in list(update_data.keys()): # delete None value out off data
+        if update_data[i] is None:
+            update_data.pop(i)
+
+    before_update_trip = collection.find_one({"trip_code": trip_code})
+    if not before_update_trip:
+        return None
+
+    if "members" in update_data:
+        new_members = update_data["members"]
+    else:
+        new_members = before_update_trip["members"]
+    if "expenses" in update_data:
+        new_expenses = update_data["expenses"]
+    else:
+        new_expenses = before_update_trip["expenses"]
+
+    if len(new_members) != len(new_expenses):
+        return {"error": "members and expenses length don't match"}
+
+    update_data["last_updated"] = datetime.now(timezone.utc)
+    result = collection.update_one(
+        {"trip_code": trip_code},
+        {"$set": update_data},
+    )
+
+    return Response(status="complete", message=f"updated {trip_code}: {result}")
+

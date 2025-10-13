@@ -14,6 +14,13 @@ class Trip(CreateTrip):
     last_updated: datetime
 
 
+class UpdateTrip(BaseModel):
+    trip_name: str | None = None
+    members: List[str] | None = None
+    expenses: List[float] | None = None
+    last_updated: datetime | None = None
+
+
 class ResultItem(BaseModel):
     from_member: str = Field(..., alias="from")
     to: str

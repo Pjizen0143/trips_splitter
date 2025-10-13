@@ -1,4 +1,4 @@
-from models import CreateTrip
+from models import CreateTrip, UpdateTrip
 from utils import calculate
 import crud
 
@@ -22,7 +22,6 @@ def read_trip(trip_code: str):
     return trip
 
 
-
 @router.delete("/trips/{trip_code}")
 async def delete_trip(trip_code: str):
     trip = crud.delete_trip(trip_code)
@@ -38,3 +37,12 @@ def calculate_trip(trip_code: str):
         return {"error": "Trip not found"}
     return split
 
+
+@router.put("/trips/{trip_code}")
+def update_trip(trip_code: str, trip: UpdateTrip):
+    update_data = crud.update_trip(trip_code, trip)
+    if not update_data:
+        return {"error": "Trip not found"}
+    if "error" in update_data:
+        raise HTTPException(status_code=400, detail=update_data["error"])
+    return update_data
