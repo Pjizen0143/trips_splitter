@@ -13,18 +13,18 @@ async def create_trip(trip: CreateTrip):
     return crud.create_trip(trip)
 
 
-@router.get("/trips/{trip_key}")
-def read_trip(trip_key: str):
-    trip = crud.get_trip(trip_key)
+@router.get("/trips/{trip_code}")
+def read_trip(trip_code: str):
+    trip = crud.get_trip(trip_code)
     if not trip:
         return {"error": "Trip not found"}
     return trip
 
 
 
-@router.delete("/trips/{trip_key}")
-async def delete_trip(trip_id: str):
-    trip = crud.delete_trip(trip_id)
+@router.delete("/trips/{trip_code}")
+async def delete_trip(trip_code: str):
+    trip = crud.delete_trip(trip_code)
     if not trip:
         return {"error": "Trip not found"}
     return {"message": "Trip deleted"}
