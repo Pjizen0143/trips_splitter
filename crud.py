@@ -51,14 +51,12 @@ def update_trip(trip_code: str, trip: UpdateTrip):
     if not before_update_trip:
         return None
 
+    new_members = before_update_trip["members"]
+    new_expenses = before_update_trip["expenses"]
     if "members" in update_data:
         new_members = update_data["members"]
-    else:
-        new_members = before_update_trip["members"]
     if "expenses" in update_data:
         new_expenses = update_data["expenses"]
-    else:
-        new_expenses = before_update_trip["expenses"]
 
     if len(new_members) != len(new_expenses):
         return {"error": "members and expenses length don't match"}
