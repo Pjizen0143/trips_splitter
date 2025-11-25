@@ -5,7 +5,7 @@ from splitter import splitter
 from db import collection
 from models import Response
 
-def random_key() -> str:
+def random_code() -> str:
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))
 
 

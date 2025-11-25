@@ -1,24 +1,24 @@
-from utils import random_key
+from utils import random_code
 from models import CreateTrip, Trip, UpdateTrip, Response
 from db import collection
 
 from datetime import datetime, timezone
 
 def create_trip(trip: CreateTrip):
-    code = random_key()
+    code = random_code()
     while collection.find_one({"trip_code": code}) is not None:
-        code = random_key()
+        code = random_code()
 
     now = datetime.now(timezone.utc)
 
-    trip_with_key = Trip(**trip.model_dump(), trip_code=code, last_updated=now)
-    result = collection.insert_one(trip_with_key.model_dump())
+    trip_with_code = Trip(**trip.model_dump(), trip_code=code, last_updated=now)
+    result = collection.insert_one(trip_with_code.model_dump())
 
     return {
         "trip_id": str(result.inserted_id),
-        "trip_code": trip_with_key.trip_code,
-        "trip_name": trip_with_key.trip_name,
-        "members": trip_with_key.members,
+        "trip_code": trip_with_code.trip_code,
+        "trip_name": trip_with_code.trip_name,
+        "members": trip_with_code.members,
         "last_updated": now,
     }
 

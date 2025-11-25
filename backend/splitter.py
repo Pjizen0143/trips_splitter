@@ -78,3 +78,9 @@ def splitter(expenses: List[float], members: List[str]):
                         )
                         _Result.append(_resultItem)
     return Response(status="Complete", message=Result(settlements=_Result))
+
+
+if __name__ == "__main__":
+    members = ["phone", "u", "milk"]
+    expenses = [0, 900, 300]
+    print(splitter(expenses, members))
